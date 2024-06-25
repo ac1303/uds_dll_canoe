@@ -1,0 +1,10 @@
+; Module-Definition file (.def) for Mingw-w64 compiler and platform Windows-x86 (32-Bit)
+
+EXPORTS
+  VIARequiredVersion  = VIARequiredVersion@8
+  VIADesiredVersion   = VIADesiredVersion@8
+  VIASetService       = VIASetService@4
+  VIAGetModuleApi     = VIAGetModuleApi@8
+  VIAReleaseModuleApi = VIAReleaseModuleApi@4
+  NLGetModuleOptions  = NLGetModuleOptions@4
+
