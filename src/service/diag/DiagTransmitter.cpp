@@ -93,19 +93,17 @@ bool DiagTransmitter::waitFlowControlFrame(cclCanMessage *message) {
         sendCondition->flowControlFrame = false;
 //        TODO 暂时不做处理,等以后再说
         cclPrintf("流控帧状态为等待,暂时不做处理!!!");
-        parsingDTO->diagSessionState = sendFailed;
+        parsingDTO->diagSessionState = flowControlError;
         DiagTransmitter::~DiagTransmitter();
         return false;
     }
     if (flowControlStatus == 2) {
         parsingDTO->diagSessionState = flowControlOverflow;
         cclPrintf("流控帧溢出");
-        parsingDTO->diagSessionState = sendFailed;
         DiagTransmitter::~DiagTransmitter();
         return false;
     }
     parsingDTO->diagSessionState = flowControlError;
-    parsingDTO->diagSessionState = sendFailed;
     cclPrintf("异常流控帧");
     DiagTransmitter::~DiagTransmitter();
     return false;
