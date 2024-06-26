@@ -103,7 +103,14 @@ typedef struct DiagConfig {
     uint8_t maxDLC = 8;
     PaddingType paddingType = Padding;
     uint8_t paddingData = 0xCC;
-    CanMessageConfig canMessageConfig = {false, false, false, false, false, false};
+    CanMessageConfig canMessageConfig = {
+            .RTR = false,
+            .Wakeup = false,
+            .TE = false,
+            .FDF = true,
+            .BRS = true,
+            .ESI = false
+    };
     FlowControlFrame *flowControlFrame = new FlowControlFrame();
 //    容错时间，当规范时间>实际时间>规范时间+容错时间时，依然可以接收到数据，单位ms
     uint16_t faultToleranceTime = 100;
