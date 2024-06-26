@@ -22,25 +22,37 @@ enum DiagSessionState {
     flowControlOverflow,
 //    异常流控帧
     flowControlError,
+//    无流控帧
+    noFlowControlFrame,
 //    超时
-    AsTimeout,
-    ArTimeout,
-    BsTimeout,
-    BrTimeout,
-    CsTimeout,
-    CrTimeout,
-    P2ClientTimeout,
-    P2ClientExTimeout,
+//    AsTimeout,
+//    ArTimeout,
+//    BsTimeout,
+//    BrTimeout,
+//    CsTimeout,
+//    CrTimeout,
+//    P2ClientTimeout,
+//    P2ClientExTimeout,
 };
 //寻址方式，物理地址或功能地址
 enum AddressingMode {
     physical = 0,
     functional = 1,
 };
+// 异常状态
+enum ErrorStatus {
+//    发送超时
+    SendTimeout = 0x00000001,
+//    响应超时
+    ResponseTimeout = 0x00000010,
+//    流控帧超时
+    BsTimeout = 0x00000100,
+};
 typedef struct DiagSession {
     uint32_t id;
     AddressingMode addressingMode = physical;
     DiagSessionState diagSessionState;  // 状态
+    uint32 errorStatus;  // 异常状态 ErrorStatus
     std::vector<cclCanMessage *> sendData;   // 已发送的数据
     std::vector<cclCanMessage *> receiveData; // 已接收的数据
     uint32_t dataLength = 0;

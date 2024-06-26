@@ -124,7 +124,13 @@ bool DiagTransmitter::sendTimeout(long long int time) {
         return false;
     }
     long long int lastTime = parsingDTO->sendData.back()->time;
-    if (time - lastTime >= cclTimeMilliseconds(node->diagConfig->networkLayerTime->N_As)) {
+//    错误状态与SendTimeout做异或操作，如果为0则说明没有超时
+    if ((parsingDTO->errorStatus ^ SendTimeout) == 0 &&
+        time - lastTime >= cclTimeMilliseconds(node->diagConfig->networkLayerTime->N_As)) {
+        parsingDTO->errorStatus = parsingDTO->errorStatus | SendTimeout;
+    }
+    if (time - lastTime >=
+        cclTimeMilliseconds(node->diagConfig->networkLayerTime->N_As + node->diagConfig->faultToleranceTime)) {
         sendCondition->sendSuccess = false;
         parsingDTO->diagSessionState = sendFailed;
         cclPrintf("发送失败，发送超时");
@@ -138,10 +144,12 @@ bool DiagTransmitter::waitFlowControlFrameTimeout(long long int time) {
         return false;
     }
     long long int N_Bs = cclTimeMilliseconds(node->diagConfig->networkLayerTime->N_Bs);
-    if (time - parsingDTO->sendData.back()->time > N_Bs) {
-        parsingDTO->diagSessionState = BsTimeout;
-        parsingDTO->diagSessionState = sendFailed;
-        cclPrintf("DiagTransmitter::waitFlowControlFrameTimeout   等待流控帧超时");
+    if ((parsingDTO->errorStatus ^ BsTimeout) == 0 && time - parsingDTO->sendData.back()->time > N_Bs) {
+        parsingDTO->errorStatus = parsingDTO->errorStatus | BsTimeout;
+    }
+    if ((time - parsingDTO->sendData.back()->time) > (N_Bs + node->diagConfig->faultToleranceTime)) {
+        parsingDTO->diagSessionState = noFlowControlFrame;
+        cclPrintf("DiagTransmitter::waitFlowControlFrameTimeout   未接收到流控帧");
         DiagTransmitter::~DiagTransmitter();
         return true;
     }
