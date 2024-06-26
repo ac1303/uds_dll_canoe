@@ -86,7 +86,7 @@ bool DiagTransmitter::waitFlowControlFrame(cclCanMessage *message) {
         sendCondition->flowControlFrame = true;
         sendCondition->stMin = false;
         flowControlFrameCount = message->data[1];
-        node->diagConfig->networkLayerTime->N_Cs = message->data[2];
+        Stmin = message->data[2];
         return true;
     }
     if (flowControlStatus == 1) {
@@ -152,12 +152,12 @@ bool DiagTransmitter::stMinTimeout(long long int time) {
     if (sendCondition->stMin) {
         return false;
     }
-    long long int N_Cs = cclTimeMilliseconds(node->diagConfig->networkLayerTime->N_Cs);
+    long long int stmin = cclTimeMilliseconds(Stmin);
     long long int lastTime = parsingDTO->sendData.back()->time;
     if (flowControlFrame != nullptr) {
         lastTime = flowControlFrame->time > lastTime ? flowControlFrame->time : lastTime;
     }
-    if (time - lastTime > N_Cs) {
+    if (time - lastTime > stmin) {
         sendCondition->stMin = true;
         return true;
     }

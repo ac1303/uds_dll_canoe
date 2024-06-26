@@ -63,25 +63,25 @@ typedef struct NetworkLayerTime {
     uint16_t N_Ar = 70;     // 接收方->发送方 接收方CAN报文发送时间，即流控制帧在数据链路层传播的时间（参考简介中的图）。当N_Ar超时，表示接收方没有及时发送N_PDU
     uint16_t N_Bs = 1000;   // 发送方->接收方 直到下一个流控制帧接收的时间，即接收方收到首帧发出ACK响应，与自己（发送方）收到流控制帧的间隔时间,当N_Bs超时，表示发送方没有接收到流控帧。
     uint16_t N_Br = 70;     // 接收方->发送方 直到下一个流控制帧发送的时间，即自己（接收方）收到首帧，与自己开始发出流控制帧的间隔时间,当N_Br超时，表示接收方没有发出流控帧。
-    uint16_t N_Cs = 70;     // 发送方->接收方 直到下一个连续帧发送的时间，即自己（发送方）收到流控制帧或者连续帧送达时产生的ACK响应，与自己开始发出新连续帧的时间间隔（参考简介中的图）；N_Cs：即STmin，发送两个连续帧需要等待的最短时间。
+    uint16_t N_Cs = 70;     // 发送方->接收方 直到下一个连续帧发送的时间，即自己（发送方）收到流控制帧或者连续帧送达时产生的ACK响应，与自己开始发出新连续帧的时间间隔（参考简介中的图）；N_Cs不等于STmin
     uint16_t N_Cr = 1000;   // 接收方->发送方 直到下一个连续帧接收的时间，即自己（接收方）收到连续帧，到下一个自己接收到连续帧的时间间隔。当N_Cr超时：接收方没有收到连续帧。
 } NetworkLayerTime;
 
 // TODO 这里需要增加配置项 ，例如诊断响应超时一定范围内，依然可以接收到数据
 // ISO 14229 会话层时间参数
 typedef struct SessionLayerTime {
-    uint16_t P2CanReq = 1;                          // P2CAN_Req的值 为向被寻址服务器发送请求的时间
-    uint16_t P2CanResp = 1;                         // P2CAN_Rsp的值 为向客户端发送响应的时间
-    uint16_t P2Can = static_cast<uint16_t>(P2CanReq +
-                                           P2CanResp);          // P2CAN的值 分为向被寻址服务器发送请求的时间和向客户端发送响应的时间 P2CAN = P2CAN_Req + P2CAN_Rsp
+    uint8_t P2CanReq = 0;                          // P2CAN_Req的值 为向被寻址服务器发送请求的时间
+    uint8_t P2CanResp = 0;                         // P2CAN_Rsp的值 为向客户端发送响应的时间
+    uint16_t P2Can =
+            P2CanReq + P2CanResp;          // P2CAN的值 分为向被寻址服务器发送请求的时间和向客户端发送响应的时间 P2CAN = P2CAN_Req + P2CAN_Rsp
     uint16_t P2Server = 50;                         // 服务器开始 响应 消息的运行需求，在接收到一个请求消息后（通过 N_USData.ind 指示）
     uint16_t P2ServerEx = 5000;                     // 服务器的开始 响应 消息的运行需求，在它传输一个响应代码为78 hex（增强响应时序） 的否定响应消息（通过 N_USData.con 指示）后
     uint16_t P2Client = static_cast<uint16_t>(P2Server +
                                               P2Can);             // 客户端在成功传输请求消息后（通过N_USData.con指示）等待响应消息的开始传入（多帧消息的N_USDataFirstFrame.ind或单帧 消息的N_USData.ind）所引起的超时
     uint16_t P2ClientEx = static_cast<uint16_t>(P2ServerEx +
                                                 P2CanResp);     // 客户端在接收到应答码为 78 hex 的否定响应后（通过N_USData.ind 指示）等待接收响应消息（多帧消息的N_USDataFirstFrame.ind或单帧 消息的N_USData.ind）所引起的增强超时
-    uint16_t P2ClientPhys = P2Server;               // 客户端在成功发送无需任何响应物理寻址请求消息（通过N_USData.con指示）之后，可以传输下一个物理寻址请求消息（请参见6.3.5.3）之前，最短等待时间。
-    uint16_t P2ClientPhysEx = P2ServerEx;           // 客户端在成功传输一个功能寻址请求消息到可以传输下一个功能寻址请求消息之间最短等待时间，此情况下不需要响应，或请求数据 只被允许使用子网级别的功能寻址服务
+    uint16_t P2ClientPhys = 0;               // 客户端在成功发送无需任何响应物理寻址请求消息（通过N_USData.con指示）之后，可以传输下一个物理寻址请求消息（请参见6.3.5.3）之前，最短等待时间。
+    uint16_t P2ClientPhysEx = 0;           // 客户端在成功传输一个功能寻址请求消息到可以传输下一个功能寻址请求消息之间最短等待时间，此情况下不需要响应，或请求数据 只被允许使用子网级别的功能寻址服务
     uint16_t S3Client = 5000;                       // 客户端传输用于保持诊断会话的功能寻址TesterPresent（3E hex）请求消息时，消息之间间隔时间。而不是多服务器的默认会话活跃的时间（functional communication），或者向某个服务器物理传输的请求消息之间的最大时间（physical communication）
     uint16_t S3Server = 5000;                       // 服务器在不接收任何诊断请求消息的情况下保持除 defaultSession 之外的诊断会话处于活动状态的时间。
 } SessionLayerTime;

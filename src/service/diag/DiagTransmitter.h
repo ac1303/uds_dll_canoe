@@ -38,6 +38,7 @@ private:
 
 //  距离下一次等待流控帧还差几帧
     int flowControlFrameCount = 1;
+    uint8_t Stmin = 0;
     std::shared_ptr<cclCanMessage> flowControlFrame = nullptr;
 
     DiagSession *parsingDTO;
