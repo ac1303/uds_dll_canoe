@@ -22,7 +22,7 @@ public:
     static int8_t configAddr(uint16_t NodeHandle, uint16_t PhyAddr, uint16_t FuncAddr, uint16_t RespAddr);
 
 //    等待诊断完成
-    static int8_t waitDiagComplete(uint32_t diagId);
+    static int waitDiagComplete(uint32_t diagId);
 
     static uint32_t sendByPhysical(uint16_t NodeHandle, uint8_t *data, uint32_t dataLength);
 };

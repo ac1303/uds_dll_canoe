@@ -16,7 +16,7 @@ DiagTransmitter::DiagTransmitter(DiagSession *parsingDTO, Node *node) {
 void DiagTransmitter::run() {
     if (parsingDTO->parsed) {
         cclWrite("全部发送完成");
-        parsingDTO->diagSessionType = sendComplete;
+        parsingDTO->diagSessionState = sendComplete;
         DiagTransmitter::~DiagTransmitter();
         return;
     }
@@ -93,19 +93,19 @@ bool DiagTransmitter::waitFlowControlFrame(cclCanMessage *message) {
         sendCondition->flowControlFrame = false;
 //        TODO 暂时不做处理,等以后再说
         cclPrintf("流控帧状态为等待,暂时不做处理!!!");
-        parsingDTO->diagSessionType = sendFailed;
+        parsingDTO->diagSessionState = sendFailed;
         DiagTransmitter::~DiagTransmitter();
         return false;
     }
     if (flowControlStatus == 2) {
-        parsingDTO->diagSessionType = flowControlOverflow;
+        parsingDTO->diagSessionState = flowControlOverflow;
         cclPrintf("流控帧溢出");
-        parsingDTO->diagSessionType = sendFailed;
+        parsingDTO->diagSessionState = sendFailed;
         DiagTransmitter::~DiagTransmitter();
         return false;
     }
-    parsingDTO->diagSessionType = flowControlError;
-    parsingDTO->diagSessionType = sendFailed;
+    parsingDTO->diagSessionState = flowControlError;
+    parsingDTO->diagSessionState = sendFailed;
     cclPrintf("异常流控帧");
     DiagTransmitter::~DiagTransmitter();
     return false;
@@ -126,7 +126,7 @@ bool DiagTransmitter::sendTimeout(long long int time) {
     long long int lastTime = parsingDTO->sendData.back()->time;
     if (time - lastTime >= cclTimeMilliseconds(node->diagConfig->networkLayerTime->N_As)) {
         sendCondition->sendSuccess = false;
-        parsingDTO->diagSessionType = sendFailed;
+        parsingDTO->diagSessionState = sendFailed;
         cclPrintf("发送失败，发送超时");
         DiagTransmitter::~DiagTransmitter();
     }
@@ -139,8 +139,8 @@ bool DiagTransmitter::waitFlowControlFrameTimeout(long long int time) {
     }
     long long int N_Bs = cclTimeMilliseconds(node->diagConfig->networkLayerTime->N_Bs);
     if (time - parsingDTO->sendData.back()->time > N_Bs) {
-        parsingDTO->diagSessionType = BsTimeout;
-        parsingDTO->diagSessionType = sendFailed;
+        parsingDTO->diagSessionState = BsTimeout;
+        parsingDTO->diagSessionState = sendFailed;
         cclPrintf("DiagTransmitter::waitFlowControlFrameTimeout   等待流控帧超时");
         DiagTransmitter::~DiagTransmitter();
         return true;

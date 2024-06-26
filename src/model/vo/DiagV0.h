@@ -8,7 +8,7 @@
 #include "../entity/Diag.h"
 
 // 诊断状态
-enum DiagSessionType {
+enum DiagSessionState {
     none = 0,
 //    发送完成
     sendComplete,
@@ -40,7 +40,7 @@ enum AddressingMode {
 typedef struct DiagSession {
     uint32_t id;
     AddressingMode addressingMode = physical;
-    DiagSessionType diagSessionType;  // 状态
+    DiagSessionState diagSessionState;  // 状态
     std::vector<cclCanMessage *> sendData;   // 已发送的数据
     std::vector<cclCanMessage *> receiveData; // 已接收的数据
     uint32_t dataLength = 0;

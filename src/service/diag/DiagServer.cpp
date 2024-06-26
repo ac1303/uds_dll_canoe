@@ -39,8 +39,13 @@ uint32_t DiagServer::generateDiagId(uint16_t NodeHandle) {
     return id;
 }
 
-int8_t DiagServer::waitDiagComplete(uint32_t diagId) {
-//    TODO: 等待诊断完成
+int DiagServer::waitDiagComplete(uint32_t diagId) {
+    if (diagMap.find(diagId) == diagMap.end()) {
+        return -1;
+    }
+    DiagSession *diagSession = diagMap[diagId];
+//    TODO 等待诊断完成
+
     return 0;
 }
 

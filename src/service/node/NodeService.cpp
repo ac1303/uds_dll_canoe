@@ -16,4 +16,3 @@ int8_t NodeService::createNode(uint16_t nmId) {
     nodeMap.insert(std::pair<uint16_t, Node *>(nmId, node));
     return 1;
 }
-
