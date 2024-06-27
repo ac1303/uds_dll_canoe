@@ -34,7 +34,7 @@ void OnMeasurementStop() {
 void OnCanMessage(struct cclCanMessage *message) {
 //    打印收到报文的时间
 //    cclPrintf("globalVar.runTime %lld", globalVar.runTime);
-    cclPrintf("OnCanMessage %lld", message->time);
+//    cclPrintf("OnCanMessage %lld", message->time);
     EventMulticaster::getInstance()->notify(CanEvent, message);
 }
 

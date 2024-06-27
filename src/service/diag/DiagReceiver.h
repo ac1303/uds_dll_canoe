@@ -12,15 +12,15 @@
 
 class DiagReceiver : public EventListener {
 private:
-    DiagSession *session;
     Node *node;
-
 public:
-    DiagReceiver(DiagSession *session, Node *node);
-
+    DiagReceiver(Node *node);
     bool onEvent(EventType type, void *event) override;
-
     void run() override;
+
+    ~DiagReceiver() {
+        EventMulticaster::getInstance()->removeListener(this);
+    }
 };
 
 

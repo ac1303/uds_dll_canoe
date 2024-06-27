@@ -12,6 +12,8 @@ int8_t DiagServer::configAddr(uint16_t NodeHandle, uint16_t PhyAddr, uint16_t Fu
     node->diagConfig->PhyAddr = PhyAddr;
     node->diagConfig->FuncAddr = FuncAddr;
     node->diagConfig->RespAddr = RespAddr;
+//    创建接收器
+    auto *diagReceiver = new DiagReceiver(node);
     return 1;
 }
 
@@ -26,7 +28,6 @@ uint32_t DiagServer::sendByPhysical(uint16_t NodeHandle, uint8_t *data, uint32_t
     parsingDTO->addressingMode = physical;
     parsingDTO->id = DiagServer::generateDiagId(NodeHandle);
     auto *diagTransmitter = new DiagTransmitter(parsingDTO, node);
-    auto *diagReceiver = new DiagReceiver(parsingDTO, node);
     diagMap.insert(std::pair<uint16_t, DiagSession *>(parsingDTO->id, parsingDTO));
     return parsingDTO->id;
 }
@@ -43,9 +44,11 @@ int DiagServer::waitDiagComplete(uint32_t diagId) {
     if (diagMap.find(diagId) == diagMap.end()) {
         return -1;
     }
+    cclPrintf("DiagServer::waitDiagComplete %x", diagId);
     DiagSession *diagSession = diagMap[diagId];
-//    TODO 等待诊断完成
-
-    return 0;
+    while (diagSession->diagSessionState != sendComplete && diagSession->diagSessionState != none) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
+    return diagSession->diagSessionState;
 }
 
