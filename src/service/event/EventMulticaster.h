@@ -25,7 +25,6 @@ public:
     void addListener(EventListener *listener);
 
     void removeListener(EventListener *listener);
-
     void notify(EventType type, void *event);
 };
 

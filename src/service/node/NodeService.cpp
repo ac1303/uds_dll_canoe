@@ -3,6 +3,7 @@
 //
 
 #include "NodeService.h"
+#include "../diag/DiagSend.h"
 
 
 int8_t NodeService::createNode(uint16_t nmId) {

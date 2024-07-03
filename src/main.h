@@ -5,7 +5,6 @@
 #ifndef DLLTEST_MAIN_H
 #define DLLTEST_MAIN_H
 
-#include "vector/CCL/CCL.h"
 #include "vector/CCL/CCL.cpp"
 #include "vector/CCL/cdll.h"
 #include "vector/CCL/VIA_CAN.h"
@@ -26,14 +25,10 @@ static GlobalVar globalVar;
 #include "model/entity/Node.h"
 #include "model/entity/Diag.h"
 
-#include "service/event/EventListener.h"
-#include "service/event/EventMulticaster.h"
 #include "service/event/EventMulticaster.cpp"
 
-#include "service/node/NodeService.h"
 #include "service/node/NodeService.cpp"
-#include "service/diag/DiagServer.h"
-#include "service/diag/DiagServer.cpp"
+#include "service/diag/DiagService.cpp"
 
 extern void OnMeasurementPreStart();
 

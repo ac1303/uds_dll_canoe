@@ -2,7 +2,7 @@
 // Created by 87837 on 2024/6/5.
 //
 
-#include "../service/diag/DiagTransmitter.h"
+//#include "../service/diag/DiagTransmitter.h"
 #include "../model/entity/Node.h"
 
 static char *cclTimeToString(std::time_t time) {
@@ -24,5 +24,5 @@ static void Debug_SendDiag(uint8_t *data, uint32_t dataLength) {
     parsingDTO->dataLength = dataLength;
 
     cclPrintf("dataLength: %d", parsingDTO->dataLength);
-    auto *diagTransmitter = new DiagTransmitter(parsingDTO, node);
+//    auto *diagTransmitter = new DiagTransmitter(parsingDTO, node);
 }

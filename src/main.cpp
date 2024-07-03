@@ -60,9 +60,9 @@ CAPL_DLL_INFO4 table[] = {
 //        Node相关
         {"Node_CreateNode", (CAPL_FARCALL) NodeService::createNode, "Node", "Create a node", 'L', 1, "L", "\000",                                                            {"nmId"}},
 //        Diag
-        {"Diag_ConfigAddr",       (CAPL_FARCALL) DiagServer::configAddr,       "Diag",  "Config a Diag's address",                       'L', 4, "LLLL", "\000\000\000\000", {"NodeHandle", "PhyAddr", "FuncAddr", "RespAddr"}},
-        {"Diag_SendByPhysical",   (CAPL_FARCALL) DiagServer::sendByPhysical,   "Diag",  "Send a diagnostic message by physical address", 'L', 3, "LBL",  "\000\001\000",     {"NodeHandle", "data",    "dataLength"}},
-        {"Diag_WaitDiagComplete", (CAPL_FARCALL) DiagServer::waitDiagComplete, "Diag",  "Wait for the diagnostic to complete",           'L', 1, "L",    "\000",             {"diagId"}},
+//        {"Diag_ConfigAddr",       (CAPL_FARCALL) DiagServer::configAddr,       "Diag",  "Config a Diag's address",                       'L', 4, "LLLL", "\000\000\000\000", {"NodeHandle", "PhyAddr", "FuncAddr", "RespAddr"}},
+//        {"Diag_SendByPhysical",   (CAPL_FARCALL) DiagServer::sendByPhysical,   "Diag",  "Send a diagnostic message by physical address", 'L', 3, "LBL",  "\000\001\000",     {"NodeHandle", "data",    "dataLength"}},
+//        {"Diag_WaitDiagComplete", (CAPL_FARCALL) DiagServer::waitDiagComplete, "Diag",  "Wait for the diagnostic to complete",           'L', 1, "L",    "\000",             {"diagId"}},
         {0,                0}
 };
 CAPLEXPORT CAPL_DLL_INFO4 *caplDllTable4 = table;
