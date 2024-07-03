@@ -20,7 +20,7 @@ void EventMulticaster::removeListener(EventListener *listener) {
 void EventMulticaster::notify(EventType type, void *event) {
     for (auto listener: listeners) {
         if (listener->onEvent(type, event)) {
-            listener->run();
+            listener->callback(event);
         }
     }
 }

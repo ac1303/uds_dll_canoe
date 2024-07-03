@@ -67,7 +67,6 @@ typedef struct NetworkLayerTime {
     uint16_t N_Cr = 1000;   // 接收方->发送方 直到下一个连续帧接收的时间，即自己（接收方）收到连续帧，到下一个自己接收到连续帧的时间间隔。当N_Cr超时：接收方没有收到连续帧。
 } NetworkLayerTime;
 
-// TODO 这里需要增加配置项 ，例如诊断响应超时一定范围内，依然可以接收到数据
 // ISO 14229 会话层时间参数
 typedef struct SessionLayerTime {
     uint8_t P2CanReq = 0;                          // P2CAN_Req的值 为向被寻址服务器发送请求的时间

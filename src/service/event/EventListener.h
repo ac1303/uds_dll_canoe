@@ -7,14 +7,20 @@
 enum EventType {
     TimeEvent,
     CanEvent,
-    VarEvent
+    VarEvent,
+
+    DiagAddSessionEvent, // 添加诊断请求
+    DiagEndSessionEvent,//    诊断请求结束
+    DiagWaitFlowControlEvent,//    等待流控帧事件
+    DiagReceiveFlowControlEvent,//    接收到流控帧事件
+    DiagReceiveResponseEvent,//    接收到响应帧事件
 };
 
 class EventListener {
 public:
     virtual bool onEvent(EventType type, void *event) = 0;
 
-    virtual void run() = 0;
+    virtual void callback(void *event) = 0;
 };
 
 
