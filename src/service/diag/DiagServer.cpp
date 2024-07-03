@@ -46,7 +46,7 @@ int DiagServer::waitDiagComplete(uint32_t diagId) {
     }
     cclPrintf("DiagServer::waitDiagComplete %x", diagId);
     DiagSession *diagSession = diagMap[diagId];
-    while (diagSession->diagSessionState != sendComplete && diagSession->diagSessionState != none) {
+    while (diagSession->diagSessionState != sendComplete && diagSession->diagSessionState != sendUnfinished) {
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
     return diagSession->diagSessionState;
