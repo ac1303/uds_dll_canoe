@@ -8,6 +8,7 @@
 #include <vector>
 #include "vector/CCL/CCL.h"
 #include "../vo/DiagV0.h"
+#include "../../service/diag/DiagEventMulticaster.h"
 
 
 enum PaddingType {
@@ -99,6 +100,10 @@ typedef struct DiagConfig {
     uint16_t RespAddr = 0x7BA;
     NetworkLayerTime *networkLayerTime = new NetworkLayerTime();
     SessionLayerTime *sessionLayerTime = new SessionLayerTime();
+
+//    诊断事件广播器
+    DiagEventMulticaster *diagEventMulticaster = new DiagEventMulticaster();
+
     uint8_t maxDLC = 8;
     PaddingType paddingType = Padding;
     uint8_t paddingData = 0xCC;

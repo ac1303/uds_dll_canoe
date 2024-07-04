@@ -11,9 +11,9 @@ private:
     Node *node;
     DiagEventMulticaster *diagEventMulticaster;
 public:
-    explicit DiagReceive(Node *node, DiagEventMulticaster *diagEventMulticaster) {
+    explicit DiagReceive(Node *node) {
         this->node = node;
-        this->diagEventMulticaster = diagEventMulticaster;
+        this->diagEventMulticaster = node->diagConfig->diagEventMulticaster;
     }
 
     bool onEvent(EventType type, void *event) override;

@@ -7,6 +7,9 @@
 
 
 int8_t NodeService::createNode(uint16_t nmId) {
+    if (nmId == 0) {
+        return -1;
+    }
     if (nodeMap.find(nmId) != nodeMap.end()) {
         return 0;
     }

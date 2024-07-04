@@ -50,7 +50,7 @@ cclCanMessage *SF_Parsing::parse(DiagSession *parsingDTO, DiagConfig *diagConfig
         return {};
     }
     auto *canMessageVO = new cclCanMessage();
-    canMessageVO->id = parsingDTO->addressingMode == physical ? diagConfig->PhyAddr : diagConfig->FuncAddr;
+    canMessageVO->id = parsingDTO->addressingMode == Physical ? diagConfig->PhyAddr : diagConfig->FuncAddr;
     canMessageVO->flags = createFlag(diagConfig->canMessageConfig);
     // 处理长度小于8的情况
     if (parsingDTO->dataLength < 8) {
@@ -92,7 +92,7 @@ cclCanMessage *FF_Parsing::parse(DiagSession *parsingDTO, DiagConfig *diagConfig
     }
     // 1、生成首帧
     auto *FF = new cclCanMessage();
-    FF->id = parsingDTO->addressingMode == physical ? diagConfig->PhyAddr : diagConfig->FuncAddr;
+    FF->id = parsingDTO->addressingMode == Physical ? diagConfig->PhyAddr : diagConfig->FuncAddr;
     FF->flags = createFlag(diagConfig->canMessageConfig);
     FF->dataLength = DLC_ActualLength[diagConfig->maxDLC];
     uint32_t offset = 2;
@@ -129,7 +129,7 @@ cclCanMessage *CF_Parsing::parse(DiagSession *parsingDTO, DiagConfig *diagConfig
         return {};
     }
     auto *CF = new cclCanMessage();
-    CF->id = parsingDTO->addressingMode == physical ? diagConfig->PhyAddr : diagConfig->FuncAddr;
+    CF->id = parsingDTO->addressingMode == Physical ? diagConfig->PhyAddr : diagConfig->FuncAddr;
     CF->flags = createFlag(diagConfig->canMessageConfig);
     if (parsingDTO->dataLength - parsingDTO->offset > DLC_ActualLength[diagConfig->maxDLC] - 1) {
         CF->dataLength = DLC_ActualLength[diagConfig->maxDLC];

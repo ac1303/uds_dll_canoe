@@ -1,4 +1,4 @@
-//
+﻿//
 // Created by fanshuhua on 2024/6/17.
 //
 
@@ -10,6 +10,7 @@ enum EventType {
     VarEvent,
 
     DiagAddSessionEvent, // 添加诊断请求
+    DiagStartSessionEvent,//    诊断请求开始
     DiagEndSessionEvent,//    诊断请求结束
     DiagWaitFlowControlEvent,//    等待流控帧事件
     DiagReceiveFlowControlEvent,//    接收到流控帧事件

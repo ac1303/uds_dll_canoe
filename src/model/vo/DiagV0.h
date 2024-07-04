@@ -20,8 +20,8 @@ enum DiagSessionState {
 };
 //寻址方式，物理地址或功能地址
 enum AddressingMode {
-    physical = 0,
-    functional = 1,
+    Physical = 0,
+    Functional = 1,
 };
 // 异常状态
 enum ErrorStatus {
@@ -35,10 +35,12 @@ enum ErrorStatus {
 //    流控帧错误
     FlowControlError = 0x8,
     flowControlOverflow = 0x10,
+//    未知错误
+    UnknownError = 0x8000000,
 };
 typedef struct DiagSession {
     uint32_t id;
-    AddressingMode addressingMode = physical;
+    AddressingMode addressingMode = Physical;
     DiagSessionState diagSessionState;  // 状态
     uint32 errorStatus;  // 异常状态 ErrorStatus
     std::vector<cclCanMessage *> sendData;   // 已发送的数据

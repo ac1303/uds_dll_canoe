@@ -11,27 +11,21 @@ enum DiagSendStatus {
     DiagSendStatus_IDLE = 0,
     DiagSendStatus_SENDING = 1,
 };
-
 class DiagSend : public EventListener {
 private:
     Node *node;
     std::queue<DiagSession *> diagSessionQueue;
     DiagSendStatus status = DiagSendStatus_IDLE;
-    DiagEventMulticaster *diagEventMulticaster;
+    DiagEventMulticaster *diagEventMulticaster = nullptr;
+
+    void addSession(DiagSession *session);
 public:
-    explicit DiagSend(Node *node, DiagEventMulticaster *diagEventMulticaster) {
+    explicit DiagSend(Node *node) {
         this->node = node;
-        this->diagEventMulticaster = diagEventMulticaster;
+        diagEventMulticaster = this->node->diagConfig->diagEventMulticaster;
         diagEventMulticaster->addListener(this);
     }
-
-    void addDiagSession(DiagSession *diagSession) {
-        diagSessionQueue.push(diagSession);
-        diagEventMulticaster->notify(EventType::DiagAddSessionEvent, nullptr);
-    }
-
     bool onEvent(EventType type, void *event) override;
-
     void callback(void *event) override;
 };
 
