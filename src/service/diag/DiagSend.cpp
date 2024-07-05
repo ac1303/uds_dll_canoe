@@ -1,4 +1,4 @@
-//
+﻿//
 // Created by fanshuhua on 2024/7/3.
 //
 
@@ -7,6 +7,7 @@
 bool DiagSend::onEvent(EventType type, void *event) {
     switch (type) {
         case DiagAddSessionEvent:
+            addSession((DiagSession *) event);
             return false;
         case DiagStartSessionEvent:
             return true;
@@ -35,6 +36,7 @@ void DiagSend::callback(void *event) {
     }
 //    如果未解析完成，则进行解析
     cclCanMessage *message = ParsingFactory::getInstance()->parse(session, node->diagConfig);
+//    3.发送数据
     if (message == nullptr) {
         session->setErrorStatus(ErrorStatus::UnknownError);
         diagEventMulticaster->notify(EventType::DiagEndSessionEvent, session);
@@ -42,8 +44,14 @@ void DiagSend::callback(void *event) {
         status = DiagSendStatus_IDLE;
         return;
     }
-//    3.发送数据
-
+    message->time = globalVar.runTime;
+    message->channel = globalVar.VIAChannel;
+    message->dir = kVIA_Tx;
+    globalVar.canBus->OutputMessage3(message->channel, message->id, message->flags, 0  // 重发次数
+            , message->dataLength, message->data);
+//    4.通知发送完成，等待判定发送是否成功
+    session->sendData.push_back(message);
+    diagEventMulticaster->notify(EventType::DiagSendWaitEvent, message);
 
 
 

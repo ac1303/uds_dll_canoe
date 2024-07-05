@@ -10,7 +10,11 @@ enum EventType {
     VarEvent,
 
     DiagAddSessionEvent, // 添加诊断请求
-    DiagStartSessionEvent,//    诊断请求开始
+    DiagStartSessionEvent,//   诊断请求开始，
+    DiagSendWaitEvent, //    等待判断报文是否发送成功
+    DiagSendSuccessEvent, //    报文发送成功
+    DiagSendFailEvent,//    报文发送失败
+
     DiagEndSessionEvent,//    诊断请求结束
     DiagWaitFlowControlEvent,//    等待流控帧事件
     DiagReceiveFlowControlEvent,//    接收到流控帧事件

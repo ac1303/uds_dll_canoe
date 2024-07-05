@@ -5,6 +5,8 @@
 #ifndef DLLTEST_DIAGEVENTMULTICASTER_H
 #define DLLTEST_DIAGEVENTMULTICASTER_H
 
+#include "../event/EventListener.h"
+
 class DiagEventMulticaster {
 private:
     std::vector<EventListener *> listeners;
