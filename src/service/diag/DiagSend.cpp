@@ -11,6 +11,9 @@ bool DiagSend::onEvent(EventType type, void *event) {
             return false;
         case DiagStartSessionEvent:
             return true;
+        case DiagReceiveFlowControlEvent:
+//            接收到流控帧
+            return DiagSend::judgeFlowControlFrame((cclCanMessage *) event);
         default:
             return false;
     }
@@ -19,6 +22,10 @@ bool DiagSend::onEvent(EventType type, void *event) {
 void DiagSend::callback(void *event) {
     if (diagSessionQueue.empty()) {
         status = DiagSendStatus_IDLE;
+        return;
+    }
+//    判断是否满足发送条件
+    if (!sendCondition.isSendCondition()) {
         return;
     }
     status = DiagSendStatus_SENDING;
@@ -51,13 +58,14 @@ void DiagSend::callback(void *event) {
             , message->dataLength, message->data);
 //    4.通知发送完成，等待判定发送是否成功
     session->sendData.push_back(message);
+    sendCondition.sendSuccess = false;
+    if (flowControlFrameCount > 0) {
+        flowControlFrameCount--;
+    }
+    if (flowControlFrameCount == 0) {
+        sendCondition.flowControlFrame = false;
+    }
     diagEventMulticaster->notify(EventType::DiagSendWaitEvent, message);
-
-
-
-//    diagEventMulticaster->notify(EventType::DiagEndSessionEvent, session);
-//    delete session;
-//    status = DiagSendStatus_IDLE;
 }
 
 void DiagSend::addSession(DiagSession *session) {
@@ -65,4 +73,9 @@ void DiagSend::addSession(DiagSession *session) {
     if (status == DiagSendStatus_IDLE) {
         diagEventMulticaster->notify(EventType::DiagStartSessionEvent, nullptr);
     }
+}
+
+bool DiagSend::judgeFlowControlFrame(cclCanMessage *canMessage) {
+//    TODO 判断流控帧
+    return false;
 }
