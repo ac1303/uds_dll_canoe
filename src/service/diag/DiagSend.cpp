@@ -76,6 +76,41 @@ void DiagSend::addSession(DiagSession *session) {
 }
 
 bool DiagSend::judgeFlowControlFrame(cclCanMessage *canMessage) {
-//    TODO 判断流控帧
-    return false;
+//    判断正常流控帧、等待流控帧、溢出流控帧和非流控帧
+    switch (canMessage->data[0]) {
+        case 0x30:
+//            正常流控帧
+            Stmin = canMessage->data[2];
+            if (canMessage->data[1] == 0) {
+//                如果不限制流控帧的数量，则设置为-1
+                flowControlFrameCount = -1;
+            } else {
+                flowControlFrameCount = canMessage->data[1];
+            }
+            sendCondition.flowControlFrame = true;
+            return true;
+        case 0x31:
+//            等待流控帧
+            sendFailed(DiagSessionState::failed, ErrorStatus::flowControlOverflow);
+//            TODO 收到等待流控帧，目前按失败处理，等待后续完善
+            cclWrite("收到等待流控帧，目前按失败处理，等待后续完善");
+            return false;
+        case 0x32:
+//            溢出流控帧
+            sendFailed(DiagSessionState::failed, ErrorStatus::flowControlOverflow);
+            return false;
+        default:
+//            非流控帧，设置状态后结束发送
+            sendFailed(DiagSessionState::failed, ErrorStatus::FlowControlError);
+            return false;
+    }
+}
+
+void DiagSend::sendFailed(DiagSessionState diagSessionState, ErrorStatus errorStatus) {
+    diagSessionQueue.front()->diagSessionState = diagSessionState;
+    diagSessionQueue.front()->setErrorStatus(errorStatus);
+    diagEventMulticaster->notify(EventType::DiagEndSessionEvent, diagSessionQueue.front());
+    delete diagSessionQueue.front();
+    diagSessionQueue.pop();
+    status = DiagSendStatus_IDLE;
 }

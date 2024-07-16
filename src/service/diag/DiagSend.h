@@ -1,4 +1,4 @@
-//
+﻿//
 // Created by fanshuhua on 2024/7/3.
 //
 
@@ -39,10 +39,12 @@ private:
     DiagSendStatus status = DiagSendStatus_IDLE;
     DiagEventMulticaster *diagEventMulticaster = nullptr;
 
-    void addSession(DiagSession *session);
 
 //    判断流控帧
     bool judgeFlowControlFrame(cclCanMessage *canMessage);
+
+//    发送失败结束
+    void sendFailed(DiagSessionState diagSessionState, ErrorStatus errorStatus);
 public:
     explicit DiagSend(Node *node) {
         this->node = node;
@@ -51,6 +53,8 @@ public:
     }
     bool onEvent(EventType type, void *event) override;
     void callback(void *event) override;
+
+    void addSession(DiagSession *session);
 };
 
 

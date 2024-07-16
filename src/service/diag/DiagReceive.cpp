@@ -1,4 +1,4 @@
-//
+﻿//
 // Created by fanshuhua on 2024/7/3.
 //
 
@@ -42,4 +42,8 @@ void DiagReceive::handleRespAddr(cclCanMessage *canMessage) {
 //        通知发送模块，流控帧已经接收
         diagEventMulticaster->notify(DiagReceiveFlowControlEvent, canMessage);
     }
+}
+
+void DiagReceive::handleFuncAddr(cclCanMessage *canMessage) {
+
 }
